@@ -1,0 +1,38 @@
+@model IEnumerable<SonDoongTourism.Models.Tour>
+@{
+    ViewData["Title"] = "Quản lý Tour";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🏕️ Quản lý Danh Sách Tour</h2>
+        <a asp-action="CreateTour" asp-controller="Admin" class="btn btn-primary">+ Thêm Tour Mới</a>
+    </div>
+
+    <table class="table table-bordered table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tên Tour</th>
+                <th>Giá</th>
+                <th>Thao Tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td><strong>@item.Name</strong></td>
+                    <td>@item.Price.ToString("N0") VNĐ</td>
+                    <td>
+                        <form asp-action="DeleteTour" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa tour này?');">
+                            <input type="hidden" name="id" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

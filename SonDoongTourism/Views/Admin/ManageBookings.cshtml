@@ -1,0 +1,66 @@
+@model IEnumerable<SonDoongTourism.Models.Booking>
+@{
+    ViewData["Title"] = "Quản lý đơn đặt Tour";
+}
+
+<div class="container-fluid mt-4">
+    <h2 class="mb-4">⚙️ Quản lý Đơn Đặt Tour</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover border shadow-sm">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã Đơn</th>
+                    <th>Khách Hàng</th>
+                    <th>Tour Đã Đặt</th>
+                    <th>Ngày Đặt</th>
+                    <th>Thanh Toán</th>
+                    <th>Trạng Thái</th>
+                    <th>Thao Tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>#@item.Id</td>
+                        <td>
+                            @item.User?.FullName <br/> 
+                            <small class="text-muted">@item.User?.Email</small>
+                        </td>
+                        <td><strong>@item.Tour?.Name</strong></td>
+                        <td>@item.BookingDate.ToString("dd/MM/yyyy")</td>
+                        
+                        <td>
+                            <span class="text-primary fw-bold">@item.PaymentMethod</span>
+                        </td>
+                        
+                        <td>
+                            <span class="badge @(item.Status == "Đã duyệt" ? "bg-success" : (item.Status == "Đã hủy" ? "bg-danger" : "bg-warning text-dark"))">
+                                @item.Status
+                            </span>
+                        </td>
+                        
+                        <td>
+                            @if (item.Status == "Chờ duyệt")
+                            {
+                                <form asp-action="ApproveBooking" asp-controller="Admin" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <button type="submit" class="btn btn-sm btn-success">✅ Duyệt đơn</button>
+                                </form>
+                            }
+                            else if (item.Status == "Đã hủy")
+                            {
+                                <span class="text-danger small">Khách đã hủy</span>
+                            }
+                            else
+                            {
+                                <span class="text-success small">Hoàn tất</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

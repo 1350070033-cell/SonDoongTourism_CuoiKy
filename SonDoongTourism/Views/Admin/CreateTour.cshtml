@@ -1,0 +1,29 @@
+@model SonDoongTourism.Models.Tour
+@{
+    ViewData["Title"] = "Thêm Tour Mới";
+}
+
+<div class="container mt-4">
+    <h2>➕ Thêm Tour Mới</h2>
+    <hr />
+    <form asp-action="CreateTour" method="post" class="shadow p-4 rounded bg-light">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Tên Tour</label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Price" class="form-label">Giá (VNĐ)</label>
+            <input asp-for="Price" type="number" class="form-control" required />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Mô tả chi tiết</label>
+            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Ảnh đại diện cho Tour</label>
+            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+        </div>
+        <button type="submit" class="btn btn-success">💾 Lưu Tour</button>
+        <a asp-action="ManageTours" class="btn btn-secondary">Trở về</a>
+    </form>
+</div>

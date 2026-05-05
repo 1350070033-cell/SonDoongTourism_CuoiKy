@@ -14,6 +14,7 @@ namespace SonDoongTourism.Data
         public DbSet<Tour> Tours { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         // Thêm dòng này vào file ApplicationDbContext.cs
+        public DbSet<Wishlist> Wishlists { get; set; }
 public DbSet<User> Users { get; set; }
     }
 }

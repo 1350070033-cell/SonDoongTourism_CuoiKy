@@ -4,6 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SonDoongTourism</title>
+
+    <meta name="description" content="Hệ thống đặt tour du lịch mạo hiểm Sơn Đoòng. Khám phá hang động lớn nhất thế giới ngay hôm nay!">
+    <meta name="keywords" content="Sơn Đoòng, Du lịch mạo hiểm, Đặt tour hang động, Quảng Bình">
+
+    <meta property="og:title" content="Đặt Tour Sơn Đoòng - Trải Nghiệm Đỉnh Cao" />
+    <meta property="og:description" content="Hành trình khám phá hang động lớn nhất thế giới. An toàn, chuyên nghiệp và đẳng cấp." />
+    <meta property="og:image" content="https://oxalisadventure.com/wp-content/uploads/2021/01/oxalis-son-doong-cave-expedition-1.jpg" />
+    <meta property="og:url" content="https://sondoongtourism.com" />
+    <meta property="og:type" content="website" />
+    
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -28,22 +38,29 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav flex-grow-1">
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Chính sách</a>
-    </li>
-</ul>
-
-<ul class="navbar-nav">
-    <li class="nav-item">
-        <a class="nav-link text-white fw-bold" asp-controller="Account" asp-action="Register">Đăng Ký</a>
-    </li>
-    <li class="nav-item">
-        <a class="btn btn-success text-dark px-4 ms-2" asp-controller="Account" asp-action="Login">Đăng Nhập</a>
-    </li>
-</ul>
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link font-weight-bold" asp-controller="Tour" asp-action="MyBookings">📋 Đơn Đặt Tour</a>
+                        </li>
+                        <li class="nav-item">
+                            <span class="nav-link text-primary">Xin chào, @User.Identity.Name!</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-danger ms-2" asp-controller="Account" asp-action="Logout">Đăng xuất</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Account" asp-action="Register">Đăng Ký</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-success ms-2" asp-controller="Account" asp-action="Login">Đăng Nhập</a>
+                        </li>
+                    }
+                    </ul>
                 </div>
             </div>
         </nav>

@@ -1,13 +1,20 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using SonDoongTourism.Data;
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-// --- THÊM ĐOẠN NÀY VÀO ---
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // Đường dẫn nếu khách chưa đăng nhập
+        options.AccessDeniedPath = "/Account/AccessDenied";
+    });
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlServer(connectionString));
     
 var app = builder.Build();
 
@@ -23,6 +30,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -32,7 +40,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-// --- THÊM ĐOẠN CODE NÀY VÀO TRƯỚC DÒNG app.Run(); ---
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -46,7 +53,6 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine("Có lỗi xảy ra khi nạp dữ liệu: " + ex.Message);
     }
 }
-// ----------------------------------------------------
 
 app.Run(); // Dòng này là dòng cuối cùng có sẵn của file Program.cs
 app.Run();

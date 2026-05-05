@@ -19,9 +19,13 @@
                 <h5 class="mb-0">Điền thông tin đặt Tour</h5>
             </div>
             <div class="card-body">
-                <form asp-action="Book" method="post">
-                    <input type="hidden" asp-for="TourId" />
-                    
+                
+            <form asp-action="Book" asp-controller="Tour" method="post">
+                <input type="hidden" asp-for="TourId" />
+                
+
+                <div class="mb-3">
+                    <label asp-for="CustomerName" class="form-label"></label>
                     <div class="mb-3">
                         <label asp-for="CustomerName" class="form-label"></label>
                         <input asp-for="CustomerName" class="form-control" placeholder="Nguyễn Văn A" />
@@ -39,9 +43,26 @@
                         <input asp-for="Phone" class="form-control" placeholder="090xxxxxxx" />
                         <span asp-validation-for="Phone" class="text-danger"></span>
                     </div>
+                    <div class="mb-3">
+                        <label asp-for="PaymentMethod" class="form-label">Phương thức thanh toán</label>
+                        <select asp-for="PaymentMethod" class="form-select">
+                            <option value="Tiền mặt">Thanh toán tiền mặt khi gặp HDV</option>
+                            <option value="Chuyển khoản">Chuyển khoản ngân hàng</option>
+                            <option value="Momo">Ví điện tử Momo</option>
+                        </select>
+                    </div>
+                   @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <button type="submit" class="btn btn-success w-100 btn-lg">Xác nhận đặt Tour</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-success w-100 btn-lg" onclick="yeuCauDangNhap()">Xác nhận đặt Tour</button>
+                        }
 
-                    <button type="submit" class="btn btn-success w-100 btn-lg">Xác nhận đặt Tour</button>
+                    
                 </form>
+                 
             </div>
         </div>
     </div>

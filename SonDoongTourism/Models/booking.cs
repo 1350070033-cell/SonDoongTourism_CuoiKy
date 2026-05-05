@@ -27,5 +27,14 @@ namespace SonDoongTourism.Models
         
         [Display(Name = "Ngày đặt")]
         public DateTime BookingDate { get; set; } = DateTime.Now;
+
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
+        
+        public string? PaymentMethod { get; set; } = "Tiền mặt"; 
+
+        public string? PaymentStatus { get; set; } = "Chưa thanh toán";
+
+        public string? Status { get; set; } = "Chờ duyệt";
     }
 }

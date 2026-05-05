@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using SonDoongTourism.Data; 
 using SonDoongTourism.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace SonDoongTourism.Controllers
 {
@@ -52,30 +55,51 @@ public IActionResult Register(User user)
 
 // 2. XỬ LÝ ĐĂNG NHẬP
 [HttpPost]
-public IActionResult Login(string Username, string Password)
+public async Task<IActionResult> Login(string username, string password)
 {
-    
-    // Lục tìm trong CSDL xem có ai khớp cả Username VÀ Password không?
-    var account = _context.Users.FirstOrDefault(u => u.Username == Username && u.Password == Password);
+    var user = _context.Users.FirstOrDefault(u => u.Username == username && u.Password == password);
 
-    if (account != null)
+    if (user != null)
     {
-        // Nếu tìm thấy -> Đăng nhập chuẩn -> Cho vào trang chủ
+        // 1. Tạo danh sách thông tin người dùng (Claims)
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // Dòng này cực kỳ quan trọng để MyBookings chạy được
+            new Claim(ClaimTypes.Role, "User")
+        };
+
+        // 2. Tạo "thẻ thông hành" (Identity)
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        // 3. Đăng nhập vào hệ thống
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
+            new ClaimsPrincipal(claimsIdentity));
+
         return RedirectToAction("Index", "Home");
     }
-    else
-    {
-        // Nếu không thấy (sai pass hoặc sai tên) -> Trả về giao diện và báo lỗi
-        ViewBag.Error = "Tài khoản hoặc mật khẩu không chính xác!";
-        return View();
-    }
+
+    ViewBag.Error = "Sai tài khoản hoặc mật khẩu";
+    return View();
 }
+
 // Hàm để HIỂN THỊ trang Đăng nhập
 [HttpGet]
 public IActionResult Login()
 {
     return View();
 }
+
+// Thêm AllowAnonymous để chắc chắn ai cũng bấm được, 
+// và dùng HttpGet để khớp với cái thẻ <a> ở Layout
+[HttpGet]
+public async Task<IActionResult> Logout()
+{
+    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    return RedirectToAction("Index", "Home");
+}
     }
+
+    
     
 }
