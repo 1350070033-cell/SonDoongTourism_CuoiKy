@@ -56,8 +56,8 @@ namespace SonDoongTourism.Controllers
         public async Task<IActionResult> ManageBookings()
         {
             var bookings = await _context.Bookings
+                .Include(b => b.User)
                 .Include(b => b.Tour)
-                
                 .OrderByDescending(b => b.Id)
                 .ToListAsync();
             return View(bookings);
